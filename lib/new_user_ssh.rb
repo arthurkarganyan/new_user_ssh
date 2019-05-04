@@ -17,8 +17,11 @@ module NewUserSsh
       cmds = ["useradd -m #{user_name}",
               "echo #{user_name}:#{user_password} | /usr/sbin/chpasswd",
               "usermod -aG sudo #{user_name}",
+              "apt-get update",
               "apt-get install -y zsh",
-              "usermod -s /bin/zsh #{user_name}"]
+              "usermod -s /bin/zsh #{user_name}",
+              "groupadd docker",
+              "usermod -aG docker #{user_name}"]
 
       # userdel -r user
 
