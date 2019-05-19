@@ -21,7 +21,9 @@ module NewUserSsh
               "apt-get install -y zsh",
               "usermod -s /bin/zsh #{user_name}",
               "groupadd docker",
-              "usermod -aG docker #{user_name}"]
+              "usermod -aG docker #{user_name}",
+              "echo '#{user_name}  ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers" # don't ask sudo password
+      ]
 
       # userdel -r user
 
