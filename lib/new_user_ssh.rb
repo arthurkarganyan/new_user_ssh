@@ -39,5 +39,26 @@ module NewUserSsh
 # brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
       puts `sshpass -p "#{user_password}" ssh-copy-id -i ~/.ssh/#{ip}.pub #{user_name}@#{ip}`
     end
+
+    desc "compress_docker_machine name", "make tar.gz for sharing docker machine config"
+    def compress_docker_machine(name)
+      machines = %x(ls ~/.docker/machine/machines).split("\n")
+      unless machines.include? name
+        puts "Machine #{name} not found. Try: #{machines}"
+        return
+      end
+
+      path = "~/.docker/machine/machines/#{name}"
+      puts path
+
+      %x(cp -r #{path} machine-shared)
+
+      file = File.open("machine-shared/config.json", "r")
+      str =  file.read
+      str.gsub!(ENV["USER"], 'username')
+      File.open("machine-shared/config.json", "w") { |file| file.puts str}
+      %x(tar -zcf machine-shared.tar.gz machine-shared)
+      %x(rm -rf machine-shared)
+    end
   end
 end
