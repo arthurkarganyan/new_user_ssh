@@ -5,7 +5,7 @@ Create users on remote servers by ssh and adds keys via ssh-copy
 ## Usage
 
 ```bash
-bin/run.rb new_user root@0.0.0.0 john
+bin/run.rb new_user 1.2.3.4 john
 ```
 
 ## License

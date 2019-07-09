@@ -5,13 +5,12 @@ module NewUserSsh
   end
 
   class CLI < Thor
-    desc "new_user root@0.0.0.0 john", "Create user john on server"
+    desc "new_user 1.2.3.4 john", "Create user john on server"
 
-    def new_user(ssh_string, user_name)
-      user, ip = ssh_string.split("@")
-      puts "Password for #{ssh_string}"
+    def new_user(ip, user_name = "deployer")
+      puts "Password for root@#{ip}"
       password = $stdin.gets.chomp
-      ssh = ::Net::SSH.start(ip, user, password: password)
+      ssh = ::Net::SSH.start(ip, "root", password: password)
       puts "Password for #{user_name}"
       user_password = $stdin.gets.chomp
       cmds = ["useradd -m #{user_name}",
