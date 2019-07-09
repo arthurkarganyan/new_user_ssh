@@ -13,6 +13,9 @@ module NewUserSsh
       ssh = ::Net::SSH.start(ip, "root", password: password)
       puts "Password for #{user_name}"
       user_password = $stdin.gets.chomp
+
+      %x(ssh-keygen -t rsa -b 4096 -f ~/.ssh/#{ip} -N '')
+
       cmds = ["useradd -m #{user_name}",
               "echo #{user_name}:#{user_password} | /usr/sbin/chpasswd",
               "usermod -aG sudo #{user_name}",
@@ -24,7 +27,7 @@ module NewUserSsh
               "echo '#{user_name}  ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers" # don't ask sudo password
       ]
 
-      # userdel -r user
+# userdel -r user
 
       cmd = cmds.join(" && ")
       puts cmd
@@ -33,8 +36,8 @@ module NewUserSsh
         print data #if stream == :stdout
       end
 
-      # brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
-      puts `sshpass -p "#{user_password}" ssh-copy-id -i ~/.ssh/id_rsa.pub #{user_name}@#{ip}`
+# brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
+      puts `sshpass -p "#{user_password}" ssh-copy-id -i ~/.ssh/#{ip}.pub #{user_name}@#{ip}`
     end
   end
 end
